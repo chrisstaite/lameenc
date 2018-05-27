@@ -13,6 +13,7 @@ endif (WIN32)
 
 if (UNIX)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-manylinux.whl")
+    set(LAME_FLAGS "-fPIC")
 endif (UNIX)
 
 include(ExternalProject)

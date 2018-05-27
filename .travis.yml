@@ -1,13 +1,10 @@
-language: python
+language: c
 
 matrix:
   include:
     - os: linux
     - os: osx
       osx_image: xcode8.3
-
-python:
-  - "3.4"
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cmake; fi
