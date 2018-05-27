@@ -1,0 +1,6 @@
+lameenc.c
+setup.py
+lameenc.egg-info/PKG-INFO
+lameenc.egg-info/SOURCES.txt
+lameenc.egg-info/dependency_links.txt
+lameenc.egg-info/top_level.txt
