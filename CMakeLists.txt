@@ -5,16 +5,12 @@ project(lameenc C)
 if (APPLE)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-macosx_10_6_intel.whl")
     set(LAME_FLAGS "-arch i386 -arch x86_64 -mmacosx-version-min=10.6")
-endif (APPLE)
-
-if (WIN32)
+elseif (WIN32)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win32.whl")
-endif (WIN32)
-
-if (UNIX)
-    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-manylinux.whl")
+else ()
+    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-linux_x86_64.whl")
     set(LAME_FLAGS "-fPIC")
-endif (UNIX)
+endif ()
 
 include(ExternalProject)
 ExternalProject_Add(lame
