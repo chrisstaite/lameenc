@@ -27,8 +27,8 @@ supported sample rate is 44100.
 
 Usage is fairly simple in Python:
 
+```
 import lameenc
-
 encoder = lameenc.Encoder()
 encoder.set_bit_rate(128)
 encoder.set_channels(2)
@@ -37,3 +37,5 @@ encoder.set_quality(2)  # 2-highest, 7-fastest
 mp3_data = encoder.encode(interleaved_pcm_data)
 # Flush when finished encoding the entire stream
 mp3_data += encoder.flush()
+```
+
