@@ -7,7 +7,7 @@ matrix:
       osx_image: xcode8.3
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pyenv install 3.4.2; pyenv global 3.4.2; PATH=$(pyenv root)/shims:$PATH; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://www.python.org/ftp/python/3.4.4/python-3.4.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
   - curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user
   - python3.4 -m pip install --user setuptools wheel
 
