@@ -199,7 +199,7 @@ static PyObject* encode(EncoderObject* self, PyObject* args, PyObject* kwds)
         );
         return NULL;
     }
-    requiredOutputBytes = 1.25 * sampleCount + 7200;
+    requiredOutputBytes = sampleCount + (sampleCount / 4) + 7200;
     outputArray = PyByteArray_FromStringAndSize(NULL, requiredOutputBytes);
     if (outputArray != NULL)
     {
@@ -232,7 +232,7 @@ static PyObject* encode(EncoderObject* self, PyObject* args, PyObject* kwds)
  */
 static PyObject* flush(EncoderObject* self, PyObject* args, PyObject* kwds)
 {
-    static const size_t blockSize = 8 * 1024;
+    static const int blockSize = 8 * 1024;
     PyObject* outputArray = NULL;
     if (self->initialised == 1)
     {

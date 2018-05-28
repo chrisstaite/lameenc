@@ -30,7 +30,7 @@ incdir = incdir[len('--incdir='):]
 lameenc = distutils.core.Extension(
     'lameenc',
     include_dirs=[incdir],
-    libraries=['libmp3lame.lib'] if sys.platform == 'win32' else [],
+    libraries=['libmp3lame'] if sys.platform == 'win32' else [],
     extra_objects=
         [] if sys.platform == 'win32' else [os.path.join(libdir, 'libmp3lame.a')],
     library_dirs=[libdir] if sys.platform == 'win32' else [],

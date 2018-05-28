@@ -1,0 +1,34 @@
+image:
+- Visual Studio 2013
+
+configuration:
+- Release
+
+platform:
+- x64
+
+environment:
+  matrix:
+  - arch: Win64
+
+clone_folder: c:\lameenc
+
+init:
+- set arch=
+- if "%arch%"=="Win64" ( set arch= Win64)
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set generator="Visual Studio 15 2017%arch%" )
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" ( set generator="Visual Studio 14 2015%arch%" )
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" ( set generator="Visual Studio 12 2013%arch%" )
+
+install:
+- set PATH=C:\Python34-x64;%PATH%
+- C:\Python34-x64\python.exe -m pip install setuptools wheel
+
+before_build:
+- cmd: |-
+    mkdir build
+    cd build
+    cmake .. -G %generator%
+
+build_script:
+  - cmake --build . --config Release
