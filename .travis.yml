@@ -2,17 +2,47 @@ language: c
 
 matrix:
   include:
-    - os: linux
+    - sudo: required
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+    - sudo: required
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
+           PRE_CMD=linux32
     - os: osx
       osx_image: xcode8.3
+      env: OSX_64=true
+    - os: osx
+      osx_image: xcode8.3
+      env: OSX_64=false
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://www.python.org/ftp/python/3.4.4/python-3.4.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user
-  - python3.4 -m pip install --user setuptools wheel
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.4.4/python-3.4.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.5.4/python-3.5.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.6 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then python3.4 -m pip install --user setuptools wheel; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then python3.5 -m pip install --user setuptools wheel; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user setuptools wheel; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull $DOCKER_IMAGE; fi
 
 script:
-  - mkdir build
-  - cd build
-  - cmake ..
-  - make
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash ./.travis-ci.sh; fi
+
+after_success:
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.4 -m pip install --user twine; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user twine; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user --upgrade pyOpenSSL; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.4 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypitest $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypitest $WHL; done; fi
+
+env:
+  global:
+    secure: xGAeijLlUHWh7JlCAhraK6LI38aXxEEDWgDztlnxDojeRD1nlj+euoru473JZ0abPTH9fifAt5qQRTuUMhAr8QnGcqhuc4EOpAUH/pPTpfh1QdmGNYVbgznKsuq3n/VXbFknvML2JnBt7Q2cxek6zX39W3SMwLowoKtixTl2v0jB2SWiZ9kEb+EGk9/JP+5JIXmXycD7zetU9P+uGgSswsVMdtcFXOKJFrDmeJc2zHtSaEny3kYFX8vOMLDEfCPCWNrA6coRYD1g6OJzZO2b3ct18ezMwze6g/cNxb6ad3uZDtMllVu+llZ0r/aypqM+XdjqfK92WVQDP5E9xwUKtY1hnERp+2DFwfV/XSw/SJGt3zSr6Iw7Qzci4deCYZNxCbvIxhpFyYnwxcNWr0rVuT37NqPH8iycKJDjbKDP1OKMwhVZjfUkPS4bEE67uGlkC5Fu+SXfky17LzmH4UFI34YheFyZCXfCYSI2wiZcthkkniBjd2gbEj0pWzGsRF7kOxADMsVvdyqknR+zAsBzL/e4t6boMT/YSgfFyGoh/MvvlFZvTR/0NLjKR3zC1J2/fDpaol72g/OGcHWk0W1krQFmNsYUx3uc5yJlQfcA5txbW41slMtdt036uz7cs9M1z9IbHY1vji/aRQ0axPomeBgBCxiIIanIOeUTvG+sZmc=

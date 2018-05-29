@@ -2,9 +2,9 @@ Metadata-Version: 1.0
 Name: lameenc
 Version: 1.0.0
 Summary: LAME encoding bindings
-Home-page: UNKNOWN
+Home-page: https://github.com/chrisstaite/lameenc
 Author: Chris Staite
-Author-email: UNKNOWN
+Author-email: chris@yourdreamnet.co.uk
 License: UNKNOWN
 Description: UNKNOWN
 Platform: UNKNOWN

@@ -43,5 +43,7 @@ setuptools.setup(
     version='1.0.0',
     description='LAME encoding bindings',
     author='Chris Staite',
+    author_email='chris@yourdreamnet.co.uk',
+    url='https://github.com/chrisstaite/lameenc',
     ext_modules=[lameenc]
 )

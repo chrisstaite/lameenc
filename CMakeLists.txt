@@ -9,13 +9,15 @@ if (APPLE)
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
-    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win32.whl")
+    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win_amd64.whl")
     set(LAME_CONFIGURE "${CMAKE_COMMAND}" -E copy
         "<SOURCE_DIR>/configMS.h" "<SOURCE_DIR>/config.h")
-    set(LAME_MAKE "C:/Program Files/Microsoft SDKs/Windows/v7.1/Bin/SetEnv.cmd" /x64 &&
-        call "$ENV{VS120COMNTOOLS}/../../VC/vcvarsall.bat" amd64 &&
+    if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+        set(MACHINE MSVCVER=Win64 MACHINE=/machine:x64)
+    endif ()
+    set(LAME_MAKE
         nmake -f "<SOURCE_DIR>/Makefile.MSVC"
-            comp=msvc asm=no MSVCVER=Win64 MACHINE=/machine:x64 libmp3lame-static.lib)
+            comp=msvc asm=no ${MACHINE} libmp3lame-static.lib)
     set(LAME_INSTALL ${CMAKE_COMMAND} -E copy
         "<SOURCE_DIR>/output/libmp3lame-static.lib" "<BINARY_DIR>/lib/libmp3lame.lib")
 else ()
@@ -44,18 +46,35 @@ ExternalProject_Add(lame
 ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
-find_package(PythonInterp 3.4 REQUIRED)
-add_custom_command(OUTPUT ${BUILT_FILE}
-    COMMAND ${PYTHON_EXECUTABLE}
-    ARGS "${CMAKE_CURRENT_SOURCE_DIR}/setup.py" bdist_wheel
-        -b "${CMAKE_CURRENT_BINARY_DIR}/build_tmp"
-        -d "${CMAKE_CURRENT_BINARY_DIR}"
-        "--libdir=${BINARY_DIR}/lib"
-        "--incdir=${SOURCE_DIR}/include"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    DEPENDS
-        lame
-        "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lameenc.c"
-)
-add_custom_target(library ALL DEPENDS ${BUILT_FILE}) 
+foreach (Version IN ITEMS 3.4 3.5 3.6)
+    unset(PYTHON_EXECUTABLE)
+    unset(PYTHONINTERP_FOUND)
+    find_package(PythonInterp "${Version}." EXACT QUIET)
+    if (PYTHONINTERP_FOUND)
+        set(PYTHON${Version}_EXECUTABLE ${PYTHON_EXECUTABLE})
+    else ()
+        unset(PYTHON_EXECUTABLE)
+        find_program(PYTHON${Version}_EXECUTABLE NAMES "python${Version}")
+        if (PYTHON_EXECUTABLE)
+            set(PYTHONINTERP_FOUND "Found")
+        endif ()
+    endif ()
+    if (NOT ${PYTHON${Version}_EXECUTABLE} STREQUAL "PYTHON${Version}_EXECUTABLE-NOTFOUND")
+        string(REPLACE "." "" VersionShort ${Version})
+        string(REPLACE "34" ${VersionShort} THIS_BUILT_FILE ${BUILT_FILE})
+        add_custom_command(OUTPUT ${THIS_BUILT_FILE}
+            COMMAND ${PYTHON${Version}_EXECUTABLE}
+            ARGS "${CMAKE_CURRENT_SOURCE_DIR}/setup.py" bdist_wheel
+                -b "${CMAKE_CURRENT_BINARY_DIR}/build_tmp"
+                -d "${CMAKE_CURRENT_BINARY_DIR}"
+                "--libdir=${BINARY_DIR}/lib"
+                "--incdir=${SOURCE_DIR}/include"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            DEPENDS
+                lame
+                "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+                "${CMAKE_CURRENT_SOURCE_DIR}/lameenc.c"
+        )
+        add_custom_target(library${Version} ALL DEPENDS ${THIS_BUILT_FILE})
+    endif ()
+endforeach ()
