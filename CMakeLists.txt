@@ -9,10 +9,11 @@ if (APPLE)
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
-    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win_amd64.whl")
+    set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win32.whl")
     set(LAME_CONFIGURE "${CMAKE_COMMAND}" -E copy
         "<SOURCE_DIR>/configMS.h" "<SOURCE_DIR>/config.h")
     if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+        string(REPLACE "win32" "win_amd64" BUILT_FILE ${BUILT_FILE})
         set(MACHINE MSVCVER=Win64 MACHINE=/machine:x64)
     endif ()
     set(LAME_MAKE

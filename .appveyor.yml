@@ -10,7 +10,7 @@ platform:
 
 environment:
   PYPIPASSWORD:
-    secure: P7IUvEOxxp++sFdMvSTobQ==
+    secure: 0xp7fTZZa86PgcNIu+uwzw==
   matrix:
   - arch: Win64
   - arch:
@@ -46,4 +46,4 @@ build_script:
   - cmake --build . --config Release
 
 on_success:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" for /f %%f in (c:\lameenc\build\*.whl) do C:\Python34%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypitest %%f
+  - IF "%APPVEYOR_REPO_TAG%" == "true" for /f %%f in (c:\lameenc\build\*.whl) do C:\Python34%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f
