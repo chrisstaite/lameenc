@@ -15,6 +15,11 @@ environment:
   - arch: Win64
   - arch:
 
+matrix:
+  exclude:
+    - image: Visual Studio 2013
+      arch:
+
 clone_folder: c:\lameenc
 
 init:
@@ -46,4 +51,4 @@ build_script:
   - cmake --build . --config Release
 
 on_success:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" for /f %%f in (c:\lameenc\build\*.whl) do C:\Python34%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f
+  - IF "%APPVEYOR_REPO_TAG%" == "true" for /r %%f in ("c:\lameenc\build\*.whl") do C:\Python34%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f
