@@ -1,4 +1,4 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: lameenc
 Version: 1.0.0
 Summary: LAME encoding bindings
@@ -8,3 +8,9 @@ Author-email: chris@yourdreamnet.co.uk
 License: UNKNOWN
 Description: UNKNOWN
 Platform: UNKNOWN
+Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
