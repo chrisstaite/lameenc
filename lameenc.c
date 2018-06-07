@@ -205,11 +205,22 @@ static PyObject* encode(EncoderObject* self, PyObject* args, PyObject* kwds)
     {
         int outputBytes;
         Py_BEGIN_ALLOW_THREADS
-        outputBytes = lame_encode_buffer_interleaved(
-            self->lame,
-            inputSamplesArray, sampleCount,
-            (unsigned char*) PyByteArray_AsString(outputArray), requiredOutputBytes
-        );
+        if (channels > 1)
+        {
+            outputBytes = lame_encode_buffer_interleaved(
+                self->lame,
+                inputSamplesArray, sampleCount,
+                (unsigned char*) PyByteArray_AsString(outputArray), requiredOutputBytes
+            );
+        }
+        else
+        {
+            outputBytes = lame_encode_buffer(
+                self->lame,
+                inputSamplesArray, inputSamplesArray, sampleCount,
+                (unsigned char*) PyByteArray_AsString(outputArray), requiredOutputBytes
+            );
+        }
         Py_END_ALLOW_THREADS
         if (outputBytes < 0)
         {
