@@ -47,7 +47,7 @@ ExternalProject_Add(lame
 ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
-foreach (Version IN ITEMS 3.4 3.5 3.6)
+foreach (Version IN ITEMS 3.4 3.5 3.6 3.7)
     unset(PYTHON_EXECUTABLE)
     unset(PYTHONINTERP_FOUND)
     find_package(PythonInterp "${Version}." EXACT QUIET)
