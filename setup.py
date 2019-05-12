@@ -40,7 +40,7 @@ lameenc = distutils.core.Extension(
 # Create the package
 setuptools.setup(
     name='lameenc',
-    version='1.0.1',
+    version='1.0.2',
     description='LAME encoding bindings',
     author='Chris Staite',
     author_email='chris@yourdreamnet.co.uk',
