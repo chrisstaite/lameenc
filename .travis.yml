@@ -38,7 +38,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull $DOCKER_IMAGE; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --rm -e TRAVIS_TAG -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash ./.travis-ci.sh; fi
 
 after_success:

@@ -21,10 +21,12 @@ if ! command -v cmake; then
         fi
         "${PYBIN}/python" setup.py bdist_wheel -b build/build_tmp -d build --libdir=build/lib --incdir=build/include/lame
     done
-    # Bundle external shared libraries into the wheels
-    for whl in build/*.whl; do
-        auditwheel repair "$whl" -w /io/build/
-    done
+    # Bundle external shared libraries into the wheels, only if on a tag
+    if [ ! -z "$TRAVIS_TAG" ]; then
+        for whl in build/*.whl; do
+            auditwheel repair "$whl" -w /io/build/
+        done
+    fi
 else
     cmake ..
     make
