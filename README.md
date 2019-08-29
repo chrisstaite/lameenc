@@ -24,9 +24,9 @@ Usage
 -----
 
 To use the library you need to have raw PCM data in 16-bit
-interleaved format.  The only options for this encoder are
-mono or stereo, i.e. 1 or 2 channels.  Currently the only
-supported sample rate is 44100.
+interleaved format.  Among the options for this encoder is
+mono or stereo, i.e. 1 or 2 channels.  You can set the sample
+rate of input PCM data.
 
 Usage is fairly simple in Python:
 
@@ -34,6 +34,7 @@ Usage is fairly simple in Python:
 import lameenc
 encoder = lameenc.Encoder()
 encoder.set_bit_rate(128)
+encoder.set_in_sample_rate(16000)
 encoder.set_channels(2)
 encoder.set_quality(2)  # 2-highest, 7-fastest
 # Can call this in a loop
