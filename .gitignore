@@ -2,3 +2,5 @@ build
 .DS_Store
 lameenc.egg-info
 .eggs
+# This is on the Travis macOS build for some reason?
+python.pkg

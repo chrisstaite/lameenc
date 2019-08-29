@@ -42,7 +42,6 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash ./.travis-ci.sh; fi
 
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git status; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.4 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user --upgrade pyOpenSSL; fi
