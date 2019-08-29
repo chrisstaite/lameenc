@@ -109,7 +109,28 @@ static PyObject* setBitRate(EncoderObject* self, PyObject* args, PyObject* kwds)
 
     if (lame_set_brate(self->lame, bitrate) < 0)
     {
-        PyErr_SetString(PyExc_RuntimeError, "Unable to set the channels");
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the bit rate");
+        return NULL;
+    }
+
+    Py_RETURN_NONE;
+}
+
+/**
+ * Set the sample rate
+ */
+static PyObject* setInSampleRate(EncoderObject* self, PyObject* args, PyObject* kwds)
+{
+    int insamplerate;
+
+    if (!PyArg_ParseTuple(args, "i", &insamplerate))
+    {
+        return NULL;
+    }
+
+    if (lame_set_in_samplerate(self->lame, insamplerate) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the input sample rate");
         return NULL;
     }
 
@@ -130,7 +151,7 @@ static PyObject* setQuality(EncoderObject* self, PyObject* args, PyObject* kwds)
 
     if (lame_set_quality(self->lame, quality) < 0)
     {
-        PyErr_SetString(PyExc_RuntimeError, "Unable to set the channels");
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the quality");
         return NULL;
     }
 
@@ -285,6 +306,7 @@ static PyMethodDef Encoder_methods[] = {
     { "set_channels", (PyCFunction) &setChannels, METH_VARARGS, "Set the number of channels" },
     { "set_quality", (PyCFunction) &setQuality, METH_VARARGS, "Set the encoder quality" },
     { "set_bit_rate", (PyCFunction) &setBitRate, METH_VARARGS, "Set the constant bit rate" },
+    { "set_in_sample_rate", (PyCFunction) &setInSampleRate, METH_VARARGS, "Set the input sample rate" },
     { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data" },
     { "flush", (PyCFunction) &flush, METH_VARARGS, "Flush the last block of MP3 data" },
     { NULL, NULL, 0, NULL }
