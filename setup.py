@@ -45,6 +45,13 @@ setuptools.setup(
         'starting_version': '0.1.0'
     },
     description='LAME encoding bindings',
+    long_description='''
+Python 3 bindings for the LAME encoding library.
+This library makes it simple to encode PCM data into MP3 without having
+to compile any binaries.
+
+Provides binaries in PyPi for Python 3.4+ for Windows, macOS and Linux.
+''',
     author='Chris Staite',
     author_email='chris@yourdreamnet.co.uk',
     url='https://github.com/chrisstaite/lameenc',
