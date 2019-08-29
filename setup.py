@@ -40,12 +40,17 @@ lameenc = distutils.core.Extension(
 # Create the package
 setuptools.setup(
     name='lameenc',
-    version='1.0.2',
+    version_config={
+        'version_format': '{tag}.dev{sha}',
+        'starting_version': '0.1.0'
+    },
     description='LAME encoding bindings',
     author='Chris Staite',
     author_email='chris@yourdreamnet.co.uk',
     url='https://github.com/chrisstaite/lameenc',
+    license='GPLv3',
     ext_modules=[lameenc],
+    setup_requires=['better-setuptools-git-version'],
     classifiers=(
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Programming Language :: Python :: 3 :: Only',
