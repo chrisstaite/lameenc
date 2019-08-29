@@ -19,12 +19,12 @@ matrix:
       env: OSX_64=false
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.4.4/python-3.4.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.5.4/python-3.5.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.7.0/python-3.7.0-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.7.0/python-3.7.0-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.4.4/python-3.4.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.5.4/python-3.5.4-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.7.0/python-3.7.0-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.7.0/python-3.7.0-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
