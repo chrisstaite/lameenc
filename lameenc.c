@@ -50,6 +50,8 @@ static PyObject* Encoder_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         lame_set_in_samplerate(self->lame, 44100);
         lame_set_brate(self->lame, 128);
         lame_set_quality(self->lame, 2);
+        // We aren't providing a file interface, so don't output a blank frame
+        lame_set_bWriteVbrTag(self->lame, 0);
         Py_END_ALLOW_THREADS
         self->initialised = 0;
     }
