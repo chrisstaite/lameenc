@@ -43,3 +43,7 @@ mp3_data = encoder.encode(interleaved_pcm_data)
 mp3_data += encoder.flush()
 ```
 
+If LAME is being chatty to stdout and you don't like
+that, then you can call `encoder.silence()` and it
+should shut up.
+

@@ -43,8 +43,7 @@ static PyObject* Encoder_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         self->lame = lame_init();
         if (self->lame == NULL)
         {
-            Py_DECREF(self);
-            self = NULL;
+            Py_CLEAR(self);
         }
         lame_set_num_channels(self->lame, 2);
         lame_set_in_samplerate(self->lame, 44100);
@@ -79,7 +78,7 @@ static int Encoder_init(EncoderObject* self, PyObject* args, PyObject* kwds)
 /**
  * Set the number of channels for the encoder
  */
-static PyObject* setChannels(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* setChannels(EncoderObject* self, PyObject* args)
 {
     int channels;
 
@@ -100,7 +99,7 @@ static PyObject* setChannels(EncoderObject* self, PyObject* args, PyObject* kwds
 /**
  * Set the bitrate
  */
-static PyObject* setBitRate(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* setBitRate(EncoderObject* self, PyObject* args)
 {
     int bitrate;
 
@@ -121,7 +120,7 @@ static PyObject* setBitRate(EncoderObject* self, PyObject* args, PyObject* kwds)
 /**
  * Set the sample rate
  */
-static PyObject* setInSampleRate(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* setInSampleRate(EncoderObject* self, PyObject* args)
 {
     int insamplerate;
 
@@ -142,7 +141,7 @@ static PyObject* setInSampleRate(EncoderObject* self, PyObject* args, PyObject* 
 /**
  * Set the number of channels for the encoder
  */
-static PyObject* setQuality(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* setQuality(EncoderObject* self, PyObject* args)
 {
     int quality;
 
@@ -163,7 +162,7 @@ static PyObject* setQuality(EncoderObject* self, PyObject* args, PyObject* kwds)
 /**
  * Encode a block of PCM data into MP3
  */
-static PyObject* encode(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* encode(EncoderObject* self, PyObject* args)
 {
     short int* inputSamplesArray;
     int inputSamplesLength;
@@ -261,10 +260,29 @@ static PyObject* encode(EncoderObject* self, PyObject* args, PyObject* kwds)
     return outputArray;
 }
 
+static void silentOutput(const char *format, va_list ap)
+{
+    return;
+}
+
+static PyObject* silence(EncoderObject* self, PyObject* args)
+{
+    if (lame_set_errorf(self->lame, &silentOutput) < 0 ||
+        lame_set_debugf(self->lame, &silentOutput) < 0 ||
+        lame_set_msgf(self->lame, &silentOutput) < 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to redirect output to silent function"
+        );
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
 /**
  * Finalise the the MP3 encoder
  */
-static PyObject* flush(EncoderObject* self, PyObject* args, PyObject* kwds)
+static PyObject* flush(EncoderObject* self, PyObject* args)
 {
     static const int blockSize = 8 * 1024;
     PyObject* outputArray = NULL;
@@ -310,7 +328,8 @@ static PyMethodDef Encoder_methods[] = {
     { "set_bit_rate", (PyCFunction) &setBitRate, METH_VARARGS, "Set the constant bit rate" },
     { "set_in_sample_rate", (PyCFunction) &setInSampleRate, METH_VARARGS, "Set the input sample rate" },
     { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data" },
-    { "flush", (PyCFunction) &flush, METH_VARARGS, "Flush the last block of MP3 data" },
+    { "flush", (PyCFunction) &flush, METH_NOARGS, "Flush the last block of MP3 data" },
+    { "silence", (PyCFunction) &silence, METH_NOARGS, "Silence the stdout from LAME" },
     { NULL, NULL, 0, NULL }
 };
 
