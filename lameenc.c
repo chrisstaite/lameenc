@@ -288,30 +288,25 @@ static PyObject* flush(EncoderObject* self, PyObject* args)
     PyObject* outputArray = NULL;
     if (self->initialised == 1)
     {
-        int offset = 0;
         int bytes = 0;
         outputArray = PyByteArray_FromStringAndSize(NULL, blockSize);
         if (outputArray != NULL)
         {
-            do
+            Py_BEGIN_ALLOW_THREADS
+            bytes = lame_encode_flush(
+                self->lame,
+                (unsigned char*) PyByteArray_AsString(outputArray),
+                blockSize
+            );
+            Py_END_ALLOW_THREADS
+            if (bytes > 0)
             {
-                Py_BEGIN_ALLOW_THREADS
-                bytes = lame_encode_flush(
-                    self->lame,
-                    (unsigned char*) &PyByteArray_AsString(outputArray)[offset],
-                    blockSize
-                );
-                Py_END_ALLOW_THREADS
-                if (bytes > 0)
+                if (PyByteArray_Resize(outputArray, bytes) == -1)
                 {
-                    if (PyByteArray_Resize(outputArray, offset + blockSize) == -1)
-                    {
-                        Py_CLEAR(outputArray);
-                    }
+                    Py_CLEAR(outputArray);
                 }
-                offset += bytes;
-            } while (outputArray != NULL && bytes > 0);
-            self->initialised = 2;
+            }
+            self->initialised = 2;            
         }
     }
     else
