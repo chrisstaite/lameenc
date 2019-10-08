@@ -34,7 +34,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then python3.5 -m pip install --user setuptools wheel better-setuptools-git-version; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.7 -m pip install --user setuptools wheel; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.4 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull $DOCKER_IMAGE; fi
 
 script:
@@ -42,11 +42,11 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash ./.travis-ci.sh; fi
 
 after_success:
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.4 -m pip install --user twine; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.5 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user --upgrade pyOpenSSL; fi
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.4 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.5 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
 
 env:
   global:
