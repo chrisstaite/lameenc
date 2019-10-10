@@ -45,8 +45,8 @@ after_success:
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.5 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user --upgrade pyOpenSSL; fi
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.5 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.5 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
 
 env:
   global:
