@@ -58,12 +58,12 @@ Provides binaries in PyPi for Python 3.4+ for Windows, macOS and Linux.
     license='GPLv3',
     ext_modules=[lameenc],
     setup_requires=['better-setuptools-git-version'],
-    classifiers=(
+    classifiers=[
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Programming Language :: Python :: 3 :: Only',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'
-    )
+    ]
 )
