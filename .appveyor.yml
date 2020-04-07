@@ -36,12 +36,8 @@ install:
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" set PATH=C:\Python34%pyarch%;%PATH%
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" set PATH=C:\Python35%pyarch%;C:\Python36%pyarch%;%PATH%
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" set PATH=C:\Python37%pyarch%;C:\Python38%pyarch%;%PATH%
-- C:\Python34%pyarch%\python.exe -m pip install setuptools wheel twine
-- C:\Python35%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python35%pyarch%\python.exe C:\Python35%pyarch%\python3.5.exe
-- C:\Python36%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python36%pyarch%\python.exe C:\Python36%pyarch%\python3.6.exe
-- C:\Python37%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python37%pyarch%\python.exe C:\Python37%pyarch%\python3.7.exe
 - C:\Python38%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python38%pyarch%\python.exe C:\Python38%pyarch%\python3.8.exe
@@ -57,4 +53,4 @@ build_script:
   - cmake --build . --config Release
 
 on_success:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python34%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f
+  - IF "%APPVEYOR_REPO_TAG%" == "true" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python38%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f
