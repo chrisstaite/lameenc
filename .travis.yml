@@ -32,7 +32,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then python3.5 -m pip install --user setuptools wheel better-setuptools-git-version; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.7 -m pip install --user setuptools wheel; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.8 -m pip install --user setuptools wheel; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.8 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull $DOCKER_IMAGE; fi
 
