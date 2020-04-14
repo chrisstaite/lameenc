@@ -11,7 +11,8 @@ matrix:
         - docker
       env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
            PRE_CMD=linux32
-    - env: COMPILE=raspberry
+#    - sudo: required
+#      env: COMPILE=raspberry
     - os: osx
       osx_image: xcode8.3
       env: OSX_64=true
@@ -36,6 +37,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.8 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ -z "$COMPILE" ]]; then docker pull $DOCKER_IMAGE; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ ! -z "$COMPILE" ]]; then python3.5 -m pip install crossenv; sudo apt install -y python3.5-venv; fi
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ -z "$COMPILE" ]]; then docker run --rm -e TRAVIS_TAG -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
