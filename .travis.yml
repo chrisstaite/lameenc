@@ -11,6 +11,7 @@ matrix:
         - docker
       env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
            PRE_CMD=linux32
+    - env: COMPILE=raspberry
     - os: osx
       osx_image: xcode8.3
       env: OSX_64=true
@@ -34,17 +35,18 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.7 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.8 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull $DOCKER_IMAGE; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ -z "$COMPILE" ]]; then docker pull $DOCKER_IMAGE; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --rm -e TRAVIS_TAG -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ -z "$COMPILE" ]]; then docker run --rm -e TRAVIS_TAG -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD bash /io/.travis-ci.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$COMPILE" == "raspberry" ]]; then ./.travis-pi.sh; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then bash ./.travis-ci.sh; fi
 
 after_success:
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python3.5 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user twine; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.6 -m pip install --user --upgrade pyOpenSSL; fi
-  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*manylinux1*.whl; do python3.5 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
+  - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.5 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
   - if [ ! -z "$TRAVIS_TAG" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then for WHL in $TRAVIS_BUILD_DIR/build/*.whl; do python3.6 -m twine upload -u chrisstaite -p $PYPIPASSWORD -r pypi $WHL; done; fi
 
 env:

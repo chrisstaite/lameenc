@@ -37,13 +37,8 @@ lameenc = distutils.core.Extension(
     sources=['lameenc.c']
 )
 
-# Create the package
-setuptools.setup(
+configuration = dict(
     name='lameenc',
-    version_config={
-        'version_format': '{tag}.dev{sha}',
-        'starting_version': '0.1.0'
-    },
     description='LAME encoding bindings',
     long_description='''
 Python 3 bindings for the LAME encoding library.
@@ -57,7 +52,6 @@ Provides binaries in PyPi for Python 3.4+ for Windows, macOS and Linux.
     url='https://github.com/chrisstaite/lameenc',
     license='GPLv3',
     ext_modules=[lameenc],
-    setup_requires=['better-setuptools-git-version'],
     classifiers=[
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Programming Language :: Python :: 3 :: Only',
@@ -67,3 +61,15 @@ Provides binaries in PyPi for Python 3.4+ for Windows, macOS and Linux.
         'Operating System :: POSIX :: Linux'
     ]
 )
+
+if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git')):
+    configuration['setup_requires'] = ['better-setuptools-git-version']
+    configuration['version_config'] = {
+        'version_format': '{tag}.dev{sha}',
+        'starting_version': '0.1.0'
+    }
+else:
+    configuration['version'] = '0.0.1'
+
+# Create the package
+setuptools.setup(**configuration)
