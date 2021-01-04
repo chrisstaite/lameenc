@@ -167,8 +167,8 @@ static PyObject* encode(EncoderObject* self, PyObject* args)
 {
     short int* inputSamplesArray;
     Py_ssize_t inputSamplesLength;
-    int sampleCount;
-    int requiredOutputBytes;
+    Py_ssize_t sampleCount;
+    Py_ssize_t requiredOutputBytes;
     PyObject *outputArray;
     int channels;
 
