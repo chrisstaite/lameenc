@@ -1,6 +1,7 @@
 image:
 - Visual Studio 2015
 - Visual Studio 2017
+- Visual Studio 2019
 
 configuration:
 - Release
@@ -20,6 +21,7 @@ clone_folder: c:\lameenc
 init:
 - set garch=
 - if "%arch%"=="Win64" ( set garch= Win64)
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( set generator="Visual Studio 16 2019%garch%" )
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set generator="Visual Studio 15 2017%garch%" )
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" ( set generator="Visual Studio 14 2015%garch%" )
 
@@ -27,7 +29,8 @@ install:
 - set pyarch=
 - if "%arch%"=="Win64" ( set pyarch=-x64)
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" set PATH=C:\Python35%pyarch%;C:\Python36%pyarch%;%PATH%
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" set PATH=C:\Python37%pyarch%;C:\Python38%pyarch%;C:\Python39%pyarch%;%PATH%
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" set PATH=C:\Python37%pyarch%;C:\Python38%pyarch%;%PATH%
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" set PATH=C:\Python39%pyarch%;%PATH%
 - copy C:\Python35%pyarch%\python.exe C:\Python35%pyarch%\python3.5.exe
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" C:\Python35%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python36%pyarch%\python.exe C:\Python36%pyarch%\python3.6.exe
@@ -36,8 +39,8 @@ install:
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python37%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python38%pyarch%\python.exe C:\Python38%pyarch%\python3.8.exe
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python38%pyarch%\python.exe -m pip install setuptools wheel
-- copy C:\Python39%pyarch%\python.exe C:\Python39%pyarch%\python3.9.exe
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python39%pyarch%\python.exe -m pip install setuptools wheel
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" copy C:\Python39%pyarch%\python.exe C:\Python39%pyarch%\python3.9.exe
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" C:\Python39%pyarch%\python.exe -m pip install setuptools wheel twine
 
 before_build:
 - cmd: |-
@@ -52,3 +55,4 @@ build_script:
 on_success:
   - IF "%APPVEYOR_REPO_TAG%" == "true" ( if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python35%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f )
   - IF "%APPVEYOR_REPO_TAG%" == "true" ( if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python37%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f )
+  - IF "%APPVEYOR_REPO_TAG%" == "true" ( if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python39%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f )
