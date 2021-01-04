@@ -184,12 +184,24 @@ static PyObject* encode(EncoderObject* self, PyObject* args)
     }
     inputSamplesLength /= 2;
 
+    channels = lame_get_num_channels(self->lame);
+
     /* Initialise the encoder if this is our first call */
     if (self->initialised == 0)
     {
         int ret;
 
         Py_BEGIN_ALLOW_THREADS
+        if (channels == 1)
+        {
+            /* Default is JOINT_STEREO which makes no sense for mono */
+            lame_set_mode(self->lame, MONO);
+        }
+        else if (lame_get_brate(self->lame) > 128)
+        {
+            /* High bit rate will get better channel separation */
+            lame_set_mode(self->lame, STEREO);
+        }
         ret = lame_init_params(self->lame);
         Py_END_ALLOW_THREADS
 
@@ -213,7 +225,6 @@ static PyObject* encode(EncoderObject* self, PyObject* args)
     }
     
     /* Do the encoding */
-    channels = lame_get_num_channels(self->lame);
     sampleCount = inputSamplesLength / channels;
     if (inputSamplesLength % channels != 0)
     {

@@ -4,7 +4,7 @@ project(lameenc C)
 
 if (APPLE)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-macosx_10_6_intel.whl")
-    set(LAME_FLAGS "-arch i386 -arch x86_64 -mmacosx-version-min=10.6")
+    set(LAME_FLAGS "-arch x86_64 -mmacosx-version-min=10.6")
     set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>")
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
