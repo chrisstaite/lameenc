@@ -1,5 +1,5 @@
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/chrisstaite/lameenc?svg=true&branch=master)](https://ci.appveyor.com/project/chrisstaite/lameenc)
-[![Build Status](https://travis-ci.org/chrisstaite/lameenc.svg?branch=master)](https://travis-ci.org/chrisstaite/lameenc)
+[![Build Status](https://travis-ci.com/chrisstaite/lameenc.svg?branch=master)](https://travis-ci.com/chrisstaite/lameenc)
 
 lameenc
 =======
