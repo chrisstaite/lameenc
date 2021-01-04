@@ -1,4 +1,5 @@
 
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <lame.h>
 
@@ -165,7 +166,7 @@ static PyObject* setQuality(EncoderObject* self, PyObject* args)
 static PyObject* encode(EncoderObject* self, PyObject* args)
 {
     short int* inputSamplesArray;
-    int inputSamplesLength;
+    Py_ssize_t inputSamplesLength;
     int sampleCount;
     int requiredOutputBytes;
     PyObject *outputArray;
