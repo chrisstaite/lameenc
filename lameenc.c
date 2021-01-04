@@ -331,10 +331,10 @@ static PyObject* flush(EncoderObject* self, PyObject* args)
 /** The methods in the Encoder class */
 static PyMethodDef Encoder_methods[] = {
     { "set_channels", (PyCFunction) &setChannels, METH_VARARGS, "Set the number of channels" },
-    { "set_quality", (PyCFunction) &setQuality, METH_VARARGS, "Set the encoder quality" },
+    { "set_quality", (PyCFunction) &setQuality, METH_VARARGS, "Set the encoder quality, 2 is highest; 7 is fastest." },
     { "set_bit_rate", (PyCFunction) &setBitRate, METH_VARARGS, "Set the constant bit rate" },
     { "set_in_sample_rate", (PyCFunction) &setInSampleRate, METH_VARARGS, "Set the input sample rate" },
-    { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data" },
+    { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data, little-endian interleaved." },
     { "flush", (PyCFunction) &flush, METH_NOARGS, "Flush the last block of MP3 data" },
     { "silence", (PyCFunction) &silence, METH_NOARGS, "Silence the stdout from LAME" },
     { NULL, NULL, 0, NULL }
