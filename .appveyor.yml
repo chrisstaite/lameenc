@@ -27,7 +27,7 @@ install:
 - set pyarch=
 - if "%arch%"=="Win64" ( set pyarch=-x64)
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" set PATH=C:\Python35%pyarch%;C:\Python36%pyarch%;%PATH%
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" set PATH=C:\Python37%pyarch%;C:\Python38%pyarch%;%PATH%
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" set PATH=C:\Python37%pyarch%;C:\Python38%pyarch%;C:\Python39%pyarch%;%PATH%
 - copy C:\Python35%pyarch%\python.exe C:\Python35%pyarch%\python3.5.exe
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" C:\Python35%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python36%pyarch%\python.exe C:\Python36%pyarch%\python3.6.exe
@@ -36,6 +36,8 @@ install:
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python37%pyarch%\python.exe -m pip install setuptools wheel twine
 - copy C:\Python38%pyarch%\python.exe C:\Python38%pyarch%\python3.8.exe
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python38%pyarch%\python.exe -m pip install setuptools wheel
+- copy C:\Python39%pyarch%\python.exe C:\Python39%pyarch%\python3.9.exe
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" C:\Python39%pyarch%\python.exe -m pip install setuptools wheel
 
 before_build:
 - cmd: |-
