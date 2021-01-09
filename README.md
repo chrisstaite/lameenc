@@ -30,7 +30,7 @@ rate of input PCM data.
 
 Usage is fairly simple in Python:
 
-```
+```python
 import lameenc
 encoder = lameenc.Encoder()
 encoder.set_bit_rate(128)
