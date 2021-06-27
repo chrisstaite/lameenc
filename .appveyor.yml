@@ -23,7 +23,7 @@ init:
 - set arch19=
 - if "%arch%"=="Win64" ( set garch= Win64)
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( if "%arch%"=="Win64" ( set arch19="-Ax64" ) )
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( if "%arch%"=="Win64" ( set arch19="-AWin32" ) )
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( if NOT "%arch%"=="Win64" ( set arch19="-AWin32" ) )
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( set generator="Visual Studio 16 2019" )
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set generator="Visual Studio 15 2017%garch%" )
 - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" ( set generator="Visual Studio 14 2015%garch%" )
