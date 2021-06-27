@@ -55,6 +55,15 @@ before_build:
 build_script:
   - cmake --build . --config Release
 
+artifacts:
+  - path: '**/*.lib'
+    name: Libraries
+  - path: '**/*.whl'
+    name: Python Wheels
+
+on_failure:
+  - appveyor PushArtifact lame\src\lame\lib\libmp3lame.lib
+
 on_success:
   - IF "%APPVEYOR_REPO_TAG%" == "true" ( if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python35%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f )
   - IF "%APPVEYOR_REPO_TAG%" == "true" ( if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" FOR /F %%f IN ('DIR /B c:\lameenc\build\*.whl') do C:\Python37%pyarch%\python.exe -m twine upload -u chrisstaite -p %PYPIPASSWORD% -r pypi %%f )
