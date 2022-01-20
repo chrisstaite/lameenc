@@ -63,7 +63,6 @@ Provides binaries in PyPi for Python 3.5+ for Windows, macOS and Linux.
 )
 
 if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git')):
-    configuration['setup_requires'] = ['better-setuptools-git-version']
     configuration['version_config'] = {
         'version_format': '{tag}.dev{sha}',
         'starting_version': '0.1.0'
