@@ -1,5 +1,4 @@
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/chrisstaite/lameenc?svg=true&branch=master)](https://ci.appveyor.com/project/chrisstaite/lameenc)
-[![Build Status](https://travis-ci.com/chrisstaite/lameenc.svg?branch=master)](https://travis-ci.com/chrisstaite/lameenc)
+[![Build Status](https://github.com/chrisstaite/lameenc/actions/workflows/cmake.yml/badge.svg)](https://github.com/chrisstaite/lameenc/actions/workflows/cmake.yml)
 
 lameenc
 =======

@@ -70,6 +70,7 @@ foreach (Version IN ITEMS 3.4 3.5 3.6 3.7 3.8 3.9 3.10)
         endif ()
     endif ()
     if (NOT ${PYTHON${Version}_EXECUTABLE} STREQUAL "PYTHON${Version}_EXECUTABLE-NOTFOUND")
+        message("Building Python ${VERSION} with executable ${PYTHON${Version}_EXECUTABLE}")
         string(REPLACE "." "" VersionShort ${Version})
         string(REPLACE "34" ${VersionShort} THIS_BUILT_FILE ${BUILT_FILE})
         add_custom_command(OUTPUT ${THIS_BUILT_FILE}

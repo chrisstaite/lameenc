@@ -64,12 +64,12 @@ Provides binaries in PyPi for Python 3.5+ for Windows, macOS and Linux.
 
 if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git')):
     configuration['setup_requires'] = ['setuptools-git-versioning']
-    configuration['version_config'] = {
-        'version_format': '{tag}.dev{sha}',
-        'starting_version': '0.1.0'
+    configuration['setuptools_git_versioning'] = {
+        'enabled': True,
+        'starting_version': '1.4.0'
     }
 else:
-    configuration['version'] = '0.0.1'
+    configuration['version'] = '1.4.0'
 
 # Create the package
 setuptools.setup(**configuration)
