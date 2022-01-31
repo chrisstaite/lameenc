@@ -26,9 +26,9 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://www.python.org/ftp/python/3.7.6/python-3.7.6-macosx10.6.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.7.9/python-3.7.9-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.8.7/python-3.8.7-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.8.10/python-3.8.10-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.9.10/python-3.9.10-macosx10.9.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then curl https://www.python.org/ftp/python/3.10.2/python-3.10.2-macos11.pkg -o python.pkg; sudo installer -pkg python.pkg -target /; rm -f python.pkg; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "false" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.6 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.7 - --user; fi
@@ -37,6 +37,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3.7 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.8 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.9 -m pip install --user setuptools wheel; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX_64" == "true" ]]; then python3.10 -m pip install --user setuptools wheel; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://bootstrap.pypa.io/get-pip.py | python3.5 - --user; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ -z "$COMPILE" ]]; then docker pull $DOCKER_IMAGE; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ ! -z "$COMPILE" ]]; then python3.5 -m pip install crossenv; sudo apt install -y python3.5-venv; fi

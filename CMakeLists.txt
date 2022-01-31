@@ -52,7 +52,7 @@ ExternalProject_Add(lame
 ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
-foreach (Version IN ITEMS 3.4 3.5 3.6 3.7 3.8 3.9)
+foreach (Version IN ITEMS 3.4 3.5 3.6 3.7 3.8 3.9 3.10)
     unset(PYTHON_EXECUTABLE)
     unset(PYTHONINTERP_FOUND)
     if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.18)
