@@ -1,11 +1,23 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(lameenc C)
 
+set(ARCH_FLAGS "")
+set(HOST_PLATFORM "")
 if (APPLE)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-macosx_10_6_intel.whl")
-    set(LAME_FLAGS "-arch x86_64 -mmacosx-version-min=10.6")
-    set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>")
+    set(HOST "")
+    if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "x86_64" OR "${CMAKE_OSX_ARCHITECTURES}" STREQUAL "")
+      set(ARCH_FLAGS "-arch x86_64")
+    endif ()
+    if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "arm64")
+      set(ARCH_FLAGS "${ARCH_FLAGS} -arch arm64")
+      set(HOST_PLATFORM "_PYTHON_HOST_PLATFORM=macosx-11.0-arm64")
+      set(HOST "--host=aarch64")
+    endif ()
+    set(LAME_FLAGS "${ARCH_FLAGS} -mmacosx-version-min=10.6")
+    set(LAME_CONFIGURE "${CMAKE_COMMAND}" "-E" "env" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
+        "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>" "${HOST}")
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
@@ -74,8 +86,11 @@ foreach (Version IN ITEMS 3.4 3.5 3.6 3.7 3.8 3.9 3.10)
         string(REPLACE "." "" VersionShort ${Version})
         string(REPLACE "34" ${VersionShort} THIS_BUILT_FILE ${BUILT_FILE})
         add_custom_command(OUTPUT ${THIS_BUILT_FILE}
-            COMMAND ${PYTHON${Version}_EXECUTABLE}
-            ARGS "${CMAKE_CURRENT_SOURCE_DIR}/setup.py" bdist_wheel
+            COMMAND ${CMAKE_COMMAND} 
+            ARGS
+                -E env "ARCHFLAGS=${ARCH_FLAGS}" "${HOST_PLATFORM}"
+                ${PYTHON${Version}_EXECUTABLE}
+                "${CMAKE_CURRENT_SOURCE_DIR}/setup.py" bdist_wheel
                 -b "${CMAKE_CURRENT_BINARY_DIR}/build_tmp"
                 -d "${CMAKE_CURRENT_BINARY_DIR}"
                 "--libdir=${BINARY_DIR}/lib"
