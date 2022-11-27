@@ -64,7 +64,7 @@ ExternalProject_Add(lame
 ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
-set(PYTHON_VERSIONS "3.7;3.8;3.9;3.10;3.11")
+option(PYTHON_VERSIONS "Python versions to build" "3.7;3.8;3.9;3.10;3.11")
 
 foreach (Version IN LISTS PYTHON_VERSIONS)
     unset(PYTHON_EXECUTABLE)
@@ -84,7 +84,7 @@ foreach (Version IN LISTS PYTHON_VERSIONS)
         endif ()
     endif ()
     if (NOT ${PYTHON${Version}_EXECUTABLE} STREQUAL "PYTHON${Version}_EXECUTABLE-NOTFOUND")
-        message("Building Python ${VERSION} with executable ${PYTHON${Version}_EXECUTABLE}")
+        message("Building Python ${Version} with executable ${PYTHON${Version}_EXECUTABLE}")
         string(REPLACE "." "" VersionShort ${Version})
         string(REPLACE "34" ${VersionShort} THIS_BUILT_FILE ${BUILT_FILE})
         add_custom_command(OUTPUT ${THIS_BUILT_FILE}
