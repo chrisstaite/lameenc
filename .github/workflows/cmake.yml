@@ -147,6 +147,46 @@ jobs:
         password: ${{ secrets.PYPI_API_TOKEN }}
         packages_dir: ${{ steps.download.outputs.download-path }}
 
+  build_linux2_24_aarch64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up emulation
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: aarch64
+
+      - name: Execute the build
+        uses: docker://quay.io/pypa/manylinux_2_24_aarch64
+        with:
+          entrypoint: bash
+          args: /github/workspace/.github/workflows/build.sh
+      - name: Archive built wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: manylinux2_24_aarch64
+          path: build/*.whl
+          if-no-files-found: error
+
+  publish_linux2_24_aarch64:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    needs: [ build_linux2_24_aarch64 ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v2
+      id: download
+      with:
+        name: manylinux2_24_aarch64
+
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        packages_dir: ${{ steps.download.outputs.download-path }}
+
   build_mac:
     runs-on: macos-latest
 
