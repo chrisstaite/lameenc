@@ -167,7 +167,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -DCMAKE_OSX_ARCHITECTURES="${{ matrix.arch }}" ..
+          cmake -DCMAKE_OSX_ARCHITECTURES="${{ matrix.arch }}" -DPYTHON_VERSIONS=${{ matrix.python-version }} ..
           make
       - name: Archive built wheel
         uses: actions/upload-artifact@v2
@@ -220,7 +220,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 16 2019" ${{ matrix.arch }}
+          cmake  -DPYTHON_VERSIONS=${{ matrix.python-version }} .. -G "Visual Studio 16 2019" ${{ matrix.arch }}
           cmake --build . --config Release
       - name: Archive built wheels
         uses: actions/upload-artifact@v2
