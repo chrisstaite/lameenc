@@ -220,7 +220,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake  -DPYTHON_VERSIONS=${{ matrix.python-version }} .. -G "Visual Studio 17.4 2022" ${{ matrix.arch }}
+          cmake  -DPYTHON_VERSIONS=${{ matrix.python-version }} .. -G "Visual Studio 17 2022" ${{ matrix.arch }}
           cmake --build . --config Release
       - name: Archive built wheels
         uses: actions/upload-artifact@v2
