@@ -50,12 +50,12 @@ Provides binaries in PyPi for Python 3.7+ for Windows, macOS and Linux.
     author='Chris Staite',
     author_email='chris@yourdreamnet.co.uk',
     url='https://github.com/chrisstaite/lameenc',
-    license='GPLv3',
+    license='LGPLv3',
     ext_modules=[lameenc],
     classifiers=[
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Programming Language :: Python :: 3 :: Only',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'
@@ -66,10 +66,10 @@ if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git
     configuration['setup_requires'] = ['setuptools-git-versioning']
     configuration['setuptools_git_versioning'] = {
         'enabled': True,
-        'starting_version': '1.4.2'
+        'starting_version': '1.5.0'
     }
 else:
-    configuration['version'] = '1.4.2'
+    configuration['version'] = '1.5.0'
 
 # Create the package
 setuptools.setup(**configuration)
