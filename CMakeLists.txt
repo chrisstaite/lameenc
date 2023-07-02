@@ -17,7 +17,10 @@ if (APPLE)
     endif ()
     set(LAME_FLAGS "${ARCH_FLAGS} -mmacosx-version-min=10.6")
     set(LAME_CONFIGURE "${CMAKE_COMMAND}" "-E" "env" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
-        "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>" "${HOST}")
+        "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>" "${HOST}"
+        "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-analyzer-hooks"
+        "--disable-debug" "--enable-analyzer=no" "--without-vorbis" "--enable-brhist"
+        "--disable-dependency-tracking")
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
@@ -38,9 +41,13 @@ else ()
     set(LAME_FLAGS "-fPIC")
     if (DEFINED ENV{ARCH})
         set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>"
-            "--host=$ENV{ARCH}" "--build=x86_64")
+            "--host=$ENV{ARCH}" "--build=x86_64" "--enable-expopt" "--enable-nasm"
+            "--disable-frontend" "--disable-decoder" "--disable-analyzer-hooks"
+            "--disable-debug" "--disable-dependency-tracking")
     else ()
-        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>")
+        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>"
+            "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-decoder"
+            "--disable-analyzer-hooks" "--disable-debug" "--disable-dependency-tracking")
     endif ()
     set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
@@ -65,6 +72,10 @@ ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
 option(PYTHON_VERSIONS "Python versions to build" "3.7;3.8;3.9;3.10;3.11")
+# New CMake doesn't take the default above for some reason...
+if (${PYTHON_VERSIONS} STREQUAL "OFF")
+    set(PYTHON_VERSIONS "3.7;3.8;3.9;3.10;3.11")
+endif ()
 
 foreach (Version IN LISTS PYTHON_VERSIONS)
     unset(PYTHON_EXECUTABLE)
