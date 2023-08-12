@@ -16,12 +16,10 @@ if (APPLE)
       set(HOST "--host=aarch64")
     endif ()
     set(LAME_FLAGS "${ARCH_FLAGS} -mmacosx-version-min=10.6")
-    set(LAME_CONFIGURE "${CMAKE_COMMAND}" "-E" "env" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
-        "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>" "${HOST}"
+    set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
+        "--prefix=<BINARY_DIR>" "${HOST}"
         "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-analyzer-hooks"
-        "--disable-debug" "--enable-analyzer=no" "--without-vorbis" "--enable-brhist"
-        "--disable-dependency-tracking")
-    set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
+        "--disable-debug" "--disable-dependency-tracking")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-win32.whl")
@@ -37,19 +35,21 @@ elseif (WIN32)
     set(LAME_INSTALL ${CMAKE_COMMAND} -E copy
         "<SOURCE_DIR>/output/libmp3lame-static.lib" "<BINARY_DIR>/lib/libmp3lame.lib")
 else ()
+    # If you update this, don't forget .github/workflows/build.sh 
     set(BUILT_FILE "lameenc-1.0.0-cp34-cp34m-linux_x86_64.whl")
     set(LAME_FLAGS "-fPIC")
     if (DEFINED ENV{ARCH})
-        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>"
-            "--host=$ENV{ARCH}" "--build=x86_64" "--enable-expopt" "--enable-nasm"
-            "--disable-frontend" "--disable-decoder" "--disable-analyzer-hooks"
-            "--disable-debug" "--disable-dependency-tracking")
+        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
+            "--prefix=<BINARY_DIR>"
+            "--host=$ENV{ARCH}" "--build=x86_64"
+            "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-decoder"
+            "--disable-analyzer-hooks" "--disable-debug" "--disable-dependency-tracking")
     else ()
-        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "--prefix=<BINARY_DIR>"
+        set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
+            "--prefix=<BINARY_DIR>"
             "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-decoder"
             "--disable-analyzer-hooks" "--disable-debug" "--disable-dependency-tracking")
     endif ()
-    set(LAME_MAKE $(MAKE) "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}")
     set(LAME_INSTALL $(MAKE) install)
 endif ()
 
@@ -59,9 +59,9 @@ ExternalProject_Add(lame
     URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz/download
     URL_HASH SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
     DOWNLOAD_NO_PROGRESS 1
-    PATCH_COMMAND "${CMAKE_COMMAND}" -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/fixed-libmp3lame.sym"
-        "<SOURCE_DIR>/include/libmp3lame.sym"
+    PATCH_COMMAND "${CMAKE_COMMAND}" 
+        -D "SOURCE_DIR=<SOURCE_DIR>"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/patch-lame.cmake"
     CONFIGURE_COMMAND ${LAME_CONFIGURE}
     BUILD_COMMAND ${LAME_MAKE}
     INSTALL_COMMAND ${LAME_INSTALL}
@@ -95,6 +95,13 @@ foreach (Version IN LISTS PYTHON_VERSIONS)
         endif ()
     endif ()
     if (NOT ${PYTHON${Version}_EXECUTABLE} STREQUAL "PYTHON${Version}_EXECUTABLE-NOTFOUND")
+        # Double check the version with the executable itself
+        execute_process(COMMAND "${PYTHON${Version}_EXECUTABLE}" "--version"
+            OUTPUT_VARIABLE VERSION_STRING)
+        if (NOT "${VERSION_STRING}" MATCHES "${Version}")
+            continue()
+        endif()
+
         message("Building Python ${Version} with executable ${PYTHON${Version}_EXECUTABLE}")
         string(REPLACE "." "" VersionShort ${Version})
         string(REPLACE "34" ${VersionShort} THIS_BUILT_FILE ${BUILT_FILE})
