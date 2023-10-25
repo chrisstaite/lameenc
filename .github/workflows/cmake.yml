@@ -192,7 +192,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
         arch: ['arm64', 'x86_64']
 
     steps:
@@ -238,7 +238,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
         arch: ['-AWin32', '-Ax64']
         python-arch: ['x86', 'x64']
         exclude:
