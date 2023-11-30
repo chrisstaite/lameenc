@@ -119,7 +119,7 @@ static PyObject* setBitRate(EncoderObject* self, PyObject* args)
 }
 
 /**
- * Set the sample rate
+ * Set the input sample rate
  */
 static PyObject* setInSampleRate(EncoderObject* self, PyObject* args)
 {
@@ -133,6 +133,27 @@ static PyObject* setInSampleRate(EncoderObject* self, PyObject* args)
     if (lame_set_in_samplerate(self->lame, insamplerate) < 0)
     {
         PyErr_SetString(PyExc_RuntimeError, "Unable to set the input sample rate");
+        return NULL;
+    }
+
+    Py_RETURN_NONE;
+}
+
+/**
+ * Set the output sample rate
+ */
+static PyObject* setOutSampleRate(EncoderObject* self, PyObject* args)
+{
+    int outsamplerate;
+
+    if (!PyArg_ParseTuple(args, "i", &outsamplerate))
+    {
+        return NULL;
+    }
+
+    if (lame_set_out_samplerate(self->lame, outsamplerate) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the output sample rate");
         return NULL;
     }
 
@@ -334,6 +355,7 @@ static PyMethodDef Encoder_methods[] = {
     { "set_quality", (PyCFunction) &setQuality, METH_VARARGS, "Set the encoder quality, 2 is highest; 7 is fastest." },
     { "set_bit_rate", (PyCFunction) &setBitRate, METH_VARARGS, "Set the constant bit rate" },
     { "set_in_sample_rate", (PyCFunction) &setInSampleRate, METH_VARARGS, "Set the input sample rate" },
+    { "set_out_sample_rate", (PyCFunction) &setOutSampleRate, METH_VARARGS, "Set the output sample rate" },
     { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data, little-endian interleaved." },
     { "flush", (PyCFunction) &flush, METH_NOARGS, "Flush the last block of MP3 data" },
     { "silence", (PyCFunction) &silence, METH_NOARGS, "Silence the stdout from LAME" },

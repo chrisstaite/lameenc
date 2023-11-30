@@ -66,10 +66,10 @@ if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git
     configuration['setup_requires'] = ['setuptools-git-versioning']
     configuration['setuptools_git_versioning'] = {
         'enabled': True,
-        'starting_version': '1.6.3'
+        'starting_version': '1.7.0'
     }
 else:
-    configuration['version'] = '1.6.3'
+    configuration['version'] = '1.7.0'
 
 # Create the package
 setuptools.setup(**configuration)
