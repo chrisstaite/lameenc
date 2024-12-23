@@ -22,7 +22,7 @@ jobs:
           entrypoint: bash
           args: /github/workspace/.github/workflows/build.sh
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: manylinux2_24_64
           path: build/*.whl
@@ -33,7 +33,7 @@ jobs:
     needs: [ build_linux2_24_64 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: manylinux2_24_64
@@ -56,7 +56,7 @@ jobs:
           entrypoint: linux32
           args: bash /github/workspace/.github/workflows/build.sh
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: manylinux2_24_32
           path: build/*.whl
@@ -67,7 +67,7 @@ jobs:
     needs: [ build_linux2_24_32 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: manylinux2_24_32
@@ -96,7 +96,7 @@ jobs:
           entrypoint: bash
           args: /github/workspace/.github/workflows/build.sh
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: manylinux2_24_aarch64
           path: build/*.whl
@@ -107,7 +107,7 @@ jobs:
     needs: [ build_linux2_24_aarch64 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: manylinux2_24_aarch64
@@ -130,7 +130,7 @@ jobs:
           entrypoint: bash
           args: /github/workspace/.github/workflows/build.sh
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: manylinux2_28_64
           path: build/*.whl
@@ -141,7 +141,7 @@ jobs:
     needs: [ build_linux2_28_64 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: manylinux2_28_64
@@ -170,7 +170,7 @@ jobs:
           entrypoint: bash
           args: /github/workspace/.github/workflows/build.sh
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: manylinux2_28_aarch64
           path: build/*.whl
@@ -181,7 +181,7 @@ jobs:
     needs: [ build_linux2_28_aarch64 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: manylinux2_28_aarch64
@@ -216,7 +216,7 @@ jobs:
           cmake -DCMAKE_OSX_ARCHITECTURES="${{ matrix.arch }}" -DPYTHON_VERSIONS=${{ matrix.python-version }} ..
           make
       - name: Archive built wheel
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: mac
           path: build/*.whl
@@ -227,7 +227,7 @@ jobs:
     needs: [ build_mac ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: mac
@@ -269,7 +269,7 @@ jobs:
           cmake  -DPYTHON_VERSIONS=${{ matrix.python-version }} .. -G "Visual Studio 16 2019" ${{ matrix.arch }}
           cmake --build . --config Release
       - name: Archive built wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: build/*.whl
@@ -280,7 +280,7 @@ jobs:
     needs: [ build_windows ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       id: download
       with:
         name: windows
