@@ -17,10 +17,10 @@ make
 make install
 cd ..
 for PYBIN in /opt/python/*/bin; do
-    if [[ $PYBIN = *"cp27"* ]]; then
+    if [[ $PYBIN = *"cp27"* ]] || [[ $PYBIN = *"cp36"* ]] || [[ $PYBIN = *"cp37"* ]]; then
         continue
     fi
-    "${PYBIN}/python" setup.py bdist_wheel -b build/build_tmp -d build --libdir=build/lib --incdir=build/include/lame
+    "${PYBIN}/python" -m build -w -o build -C="--build-option=--libdir=build/lib" -C="--build-option=--incdir=build/include/lame"
 done
 for whl in build/*.whl; do
     auditwheel repair "$whl" -w build/

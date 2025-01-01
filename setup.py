@@ -4,16 +4,19 @@ import distutils.core
 import os.path
 
 
+print(sys.argv)
 # Grab the library location from the command line
 libdir = None
 for argument in sys.argv:
     if argument.startswith('--libdir='):
         libdir = argument
 if libdir is None:
-    print('Need to specify location of liblame')
-    sys.exit(1)
-sys.argv.remove(libdir)
-libdir = libdir[len('--libdir='):]
+    if 'bdist_wheel' in sys.argv:
+        print('Need to specify location of liblame')
+        sys.exit(1)
+else:
+    sys.argv.remove(libdir)
+    libdir = libdir[len('--libdir='):]
 
 # Grab the include location from the command line
 incdir = None
@@ -21,19 +24,21 @@ for argument in sys.argv:
     if argument.startswith('--incdir='):
         incdir = argument
 if incdir is None:
-    print('Need to specify location of liblame source')
-    sys.exit(1)
-sys.argv.remove(incdir)
-incdir = incdir[len('--incdir='):]
+    if 'bdist_wheel' in sys.argv:
+        print('Need to specify location of liblame source')
+        sys.exit(1)
+else:
+    sys.argv.remove(incdir)
+    incdir = incdir[len('--incdir='):]
 
 # Create the extension
 lameenc = distutils.core.Extension(
     'lameenc',
-    include_dirs=[incdir],
+    include_dirs=[incdir] if incdir else [],
     libraries=['libmp3lame'] if sys.platform == 'win32' else [],
     extra_objects=
-        [] if sys.platform == 'win32' else [os.path.join(libdir, 'libmp3lame.a')],
-    library_dirs=[libdir] if sys.platform == 'win32' else [],
+        [] if sys.platform == 'win32' or not libdir else [os.path.join(libdir, 'libmp3lame.a')],
+    library_dirs=[libdir] if sys.platform == 'win32' and libdir else [],
     sources=['lameenc.c']
 )
 
@@ -61,15 +66,6 @@ Provides binaries in PyPi for Python 3.8+ for Windows, macOS and Linux.
         'Operating System :: POSIX :: Linux'
     ]
 )
-
-if os.path.exists(os.path.join(os.path.abspath(os.path.dirname(__file__)), '.git')):
-    configuration['setup_requires'] = ['setuptools-git-versioning']
-    configuration['setuptools_git_versioning'] = {
-        'enabled': True,
-        'starting_version': '1.7.0'
-    }
-else:
-    configuration['version'] = '1.7.0'
 
 # Create the package
 setuptools.setup(**configuration)

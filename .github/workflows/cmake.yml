@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Execute the build
         uses: docker://quay.io/pypa/manylinux_2_24_x86_64
         with:
@@ -49,7 +52,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Execute the build
         uses: docker://quay.io/pypa/manylinux_2_24_i686
         with:
@@ -83,7 +89,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Set up emulation
         uses: docker/setup-qemu-action@v2
@@ -123,7 +132,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Execute the build
         uses: docker://quay.io/pypa/manylinux_2_28_x86_64
         with:
@@ -157,10 +169,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Set up emulation
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: aarch64
 
@@ -203,12 +218,15 @@ jobs:
 
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Python dependencies
-        run: python -m pip install --user setuptools wheel
-      - uses: actions/checkout@v2
+        run: python -m pip install --user build
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Build the wheel
         run: |
           mkdir build
@@ -218,7 +236,7 @@ jobs:
       - name: Archive built wheel
         uses: actions/upload-artifact@v4
         with:
-          name: mac
+          name: mac_${{ matrix.arch }}_${{ matrix.python-version }}
           path: build/*.whl
           if-no-files-found: error
 
@@ -226,11 +244,15 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'created'
     needs: [ build_mac ]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        arch: ['arm64', 'x86_64']
     steps:
     - uses: actions/download-artifact@v4
       id: download
       with:
-        name: mac
+        name: mac_${{ matrix.arch }}_${{ matrix.python-version }}
 
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -255,13 +277,16 @@ jobs:
 
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.python-arch }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Install dependencies
-        run: python -m pip install --upgrade setuptools wheel
+        run: python -m pip install --upgrade build
       - name: Build the wheel
         run: |
           mkdir build
@@ -271,7 +296,7 @@ jobs:
       - name: Archive built wheels
         uses: actions/upload-artifact@v4
         with:
-          name: windows
+          name: windows_${{ matrix.python-arch }}_${{ matrix.python-version }}
           path: build/*.whl
           if-no-files-found: error
 
@@ -279,11 +304,15 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'created'
     needs: [ build_windows ]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-arch: ['x86', 'x64']
     steps:
     - uses: actions/download-artifact@v4
       id: download
       with:
-        name: windows
+        name: windows_${{ matrix.python-arch }}_${{ matrix.python-version }}
 
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
