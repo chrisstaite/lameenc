@@ -46,7 +46,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_linux2_24_32:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_linux2_24_aarch64:
     runs-on: ubuntu-latest
@@ -126,7 +126,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_linux2_28_64:
     runs-on: ubuntu-latest
@@ -163,7 +163,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_linux2_28_aarch64:
     runs-on: ubuntu-latest
@@ -206,7 +206,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_mac:
     runs-on: macos-latest
@@ -246,7 +246,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
         arch: ['arm64', 'x86_64']
     steps:
     - uses: actions/download-artifact@v4
@@ -259,7 +259,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_windows:
     runs-on: windows-2019
@@ -306,7 +306,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
         python-arch: ['x86', 'x64']
     steps:
     - uses: actions/download-artifact@v4
@@ -319,4 +319,4 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages_dir: ${{ steps.download.outputs.download-path }}
+        packages-dir: ${{ steps.download.outputs.download-path }}
