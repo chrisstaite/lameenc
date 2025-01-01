@@ -349,6 +349,150 @@ static PyObject* flush(EncoderObject* self, PyObject* args)
     return outputArray;
 }
 
+static PyObject* setVbr(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR after encoding starts"
+        );
+        return NULL;
+    }
+    int mode_int;
+    if (!PyArg_ParseTuple(args, "i", &mode_int))
+    {
+        return NULL;
+    }
+    vbr_mode mode;
+    switch (mode_int) {
+        case 0:
+            mode = vbr_off;
+            break;
+        case 2:
+            mode = vbr_rh;
+            break;
+        case 3:
+            mode = vbr_abr;
+            break;
+        case 4:
+            mode = vbr_mtrh;
+            break;
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Invalid mode");
+            return NULL;
+    }
+    if (lame_set_VBR(self->lame, mode) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the mode");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyObject* setVbrQuality(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR quality after encoding starts"
+        );
+        return NULL;
+    }
+    float quality;
+    if (!PyArg_ParseTuple(args, "f", &quality))
+    {
+        return NULL;
+    }
+    if (lame_set_VBR_quality(self->lame, quality) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the VBR quality");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyObject* setVbrMean(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR quality after encoding starts"
+        );
+        return NULL;
+    }
+    int mean;
+    if (!PyArg_ParseTuple(args, "i", &mean))
+    {
+        return NULL;
+    }
+    if (lame_set_VBR_mean_bitrate_kbps(self->lame, mean) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the VBR mean bitrate");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyObject* setVbrMin(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR quality after encoding starts"
+        );
+        return NULL;
+    }
+    int mean;
+    if (!PyArg_ParseTuple(args, "i", &mean))
+    {
+        return NULL;
+    }
+    if (lame_set_VBR_min_bitrate_kbps(self->lame, mean) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the VBR min bitrate");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyObject* setVbrMax(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR quality after encoding starts"
+        );
+        return NULL;
+    }
+    int mean;
+    if (!PyArg_ParseTuple(args, "i", &mean))
+    {
+        return NULL;
+    }
+    if (lame_set_VBR_max_bitrate_kbps(self->lame, mean) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the VBR max bitrate");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
+static PyObject* setVbrHardMin(EncoderObject* self, PyObject* args) {
+    if (self->initialised != 0)
+    {
+        PyErr_SetString(
+            PyExc_RuntimeError, "Unable to set VBR quality after encoding starts"
+        );
+        return NULL;
+    }
+    int hard_min;
+    if (!PyArg_ParseTuple(args, "p", &hard_min))
+    {
+        return NULL;
+    }
+    if (lame_set_VBR_hard_min(self->lame, hard_min) < 0)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to set the VBR hard minimum flag");
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+
 /** The methods in the Encoder class */
 static PyMethodDef Encoder_methods[] = {
     { "set_channels", (PyCFunction) &setChannels, METH_VARARGS, "Set the number of channels" },
@@ -359,6 +503,12 @@ static PyMethodDef Encoder_methods[] = {
     { "encode", (PyCFunction) &encode, METH_VARARGS, "Encode a block of PCM data, little-endian interleaved." },
     { "flush", (PyCFunction) &flush, METH_NOARGS, "Flush the last block of MP3 data" },
     { "silence", (PyCFunction) &silence, METH_NOARGS, "Silence the stdout from LAME" },
+    { "set_vbr", (PyCFunction) &setVbr, METH_VARARGS, "Set the VBR mode" },
+    { "set_vbr_quality", (PyCFunction) &setVbrQuality, METH_VARARGS, "Set the VBR quality" },
+    { "set_vbr_mean_bitrate_kbps", (PyCFunction) &setVbrMean, METH_VARARGS, "Set the VBR mean bitrate in kbps" },
+    { "set_vbr_min_bitrate_kbps", (PyCFunction) &setVbrMin, METH_VARARGS, "Set the VBR min bitrate in kbps" },
+    { "set_vbr_max_bitrate_kbps", (PyCFunction) &setVbrMax, METH_VARARGS, "Set the VBR max bitrate in kbps" },
+    { "set_vbr_hard_min", (PyCFunction) &setVbrHardMin, METH_VARARGS, "Set the whether the minimum bitrate is hard enforced" },
     { NULL, NULL, 0, NULL }
 };
 
@@ -429,6 +579,13 @@ PyMODINIT_FUNC PyInit_lameenc(void)
         {
             Py_CLEAR(module);
         }
+    }
+
+    if (module) {
+        PyModule_AddIntConstant(module, "VBR_OFF", 0L);
+        PyModule_AddIntConstant(module, "VBR_RH", 2L);
+        PyModule_AddIntConstant(module, "VBR_ABR", 3L);
+        PyModule_AddIntConstant(module, "VBR_MTRH", 4L);
     }
 
     return module;

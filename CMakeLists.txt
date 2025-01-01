@@ -75,7 +75,7 @@ ExternalProject_Get_Property(lame SOURCE_DIR)
 option(PYTHON_VERSIONS "Python versions to build" "3.8;3.9;3.10;3.11;3.12;3.13")
 # New CMake doesn't take the default above for some reason...
 if (${PYTHON_VERSIONS} STREQUAL "OFF")
-    set(PYTHON_VERSIONS "3.7;3.8;3.9;3.10;3.11")
+    set(PYTHON_VERSIONS "3.7;3.8;3.9;3.10;3.11;3.12;3.13")
 endif ()
 
 foreach (Version IN LISTS PYTHON_VERSIONS)
