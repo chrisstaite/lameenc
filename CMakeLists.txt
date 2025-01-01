@@ -9,6 +9,7 @@ if (APPLE)
     set(HOST "")
     if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "x86_64" OR "${CMAKE_OSX_ARCHITECTURES}" STREQUAL "")
       set(ARCH_FLAGS "-arch x86_64")
+      set(HOST "--host=x86_64")
     endif ()
     if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "arm64")
       set(ARCH_FLAGS "${ARCH_FLAGS} -arch arm64")
@@ -109,15 +110,14 @@ foreach (Version IN LISTS PYTHON_VERSIONS)
             COMMAND ${CMAKE_COMMAND} 
             ARGS
                 -E env "ARCHFLAGS=${ARCH_FLAGS}" "${HOST_PLATFORM}"
-                ${PYTHON${Version}_EXECUTABLE}
-                "${CMAKE_CURRENT_SOURCE_DIR}/setup.py" bdist_wheel
-                -b "${CMAKE_CURRENT_BINARY_DIR}/build_tmp"
-                -d "${CMAKE_CURRENT_BINARY_DIR}"
-                "--libdir=${BINARY_DIR}/lib"
-                "--incdir=${SOURCE_DIR}/include"
+                ${PYTHON${Version}_EXECUTABLE} -m build -w
+                -o "${CMAKE_CURRENT_BINARY_DIR}"
+                "-C=--build-option=--libdir=${BINARY_DIR}/lib"
+                "-C=--build-option=--incdir=${SOURCE_DIR}/include"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             DEPENDS
                 lame
+                "${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml"
                 "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
                 "${CMAKE_CURRENT_SOURCE_DIR}/lameenc.c"
         )

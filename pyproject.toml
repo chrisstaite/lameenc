@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools","wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lameenc"
+description = "LAME encoding bindings"
+readme = "DESCRIPTION.md"
+authors = [
+  {name = "Chris Staite", email = "chris@yourdreamnet.co.uk"},
+]
+license = {file = "LICENSE"}
+classifiers = [
+    "Topic :: Multimedia :: Sound/Audio :: Conversion",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux"
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/chrisstaite/lameenc"
+
+[tool.setuptools_scm]
