@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(lameenc C)
 
@@ -72,10 +72,10 @@ ExternalProject_Add(lame
 ExternalProject_Get_Property(lame BINARY_DIR)
 ExternalProject_Get_Property(lame SOURCE_DIR)
 
-option(PYTHON_VERSIONS "Python versions to build" "3.8;3.9;3.10;3.11;3.12;3.13")
+option(PYTHON_VERSIONS "Python versions to build" "3.10;3.11;3.12;3.13;3.14")
 # New CMake doesn't take the default above for some reason...
 if (${PYTHON_VERSIONS} STREQUAL "OFF")
-    set(PYTHON_VERSIONS "3.7;3.8;3.9;3.10;3.11;3.12;3.13")
+    set(PYTHON_VERSIONS "3.10;3.11;3.12;3.13;3.14")
 endif ()
 
 foreach (Version IN LISTS PYTHON_VERSIONS)
