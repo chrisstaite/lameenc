@@ -256,18 +256,25 @@ jobs:
         packages-dir: ${{ steps.download.outputs.download-path }}
 
   build_windows:
-    runs-on: windows-2022
+    runs-on: ${{ matrix.runner }}
 
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
-        arch: ['-AWin32', '-Ax64']
-        python-arch: ['x86', 'x64']
-        exclude:
+        python-arch: ['x86', 'x64', 'arm64']
+        include:
           - arch: '-AWin32'
-            python-arch: 'x64'
-          - arch: '-Ax64'
             python-arch: 'x86'
+            runner: windows-2022
+          - arch: '-Ax64'
+            python-arch: 'x64'
+            runner: windows-2022
+          - arch: '-AARM64'
+            python-arch: 'arm64'
+            runner: windows-11-arm
+        exclude:
+          - python-version: '3.10'
+            python-arch: 'arm64'
 
     steps:
       - name: Set up Python
@@ -285,7 +292,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake  -DPYTHON_VERSIONS=${{ matrix.python-version }} .. -G "Visual Studio 17 2022" ${{ matrix.arch }}
+          cmake "-DPYTHON_VERSIONS=${{ matrix.python-version }}" .. -G "Visual Studio 17 2022" ${{ matrix.arch }}
           cmake --build . --config Release
       - name: Archive built wheels
         uses: actions/upload-artifact@v4
@@ -301,7 +308,10 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
-        python-arch: ['x86', 'x64']
+        python-arch: ['x86', 'x64', 'arm64']
+        exclude:
+          - python-version: '3.10'
+            python-arch: 'arm64'
     permissions:
       id-token: write
     steps:

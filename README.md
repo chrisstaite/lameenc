@@ -19,6 +19,21 @@ cmake ..
 make
 ```
 
+On Windows, use the Visual Studio generator instead of `make`. For Windows
+ARM64, install the ARM64 Python matching the version you want to build and
+the Visual Studio C++ ARM64 build tools, then run the commands below. Replace
+`3.12` with another supported Python version if needed.
+
+```
+python3.12 -m pip install --upgrade build
+mkdir build
+cd build
+cmake -G "Visual Studio 17 2022" -A ARM64 "-DPYTHON_VERSIONS=3.12" ..
+cmake --build . --config Release
+```
+
+The wheel will be written to `build/`.
+
 Usage
 -----
 
