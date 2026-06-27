@@ -55,12 +55,11 @@ Provides binaries in PyPi for Python 3.10+ for Windows, macOS and Linux.
     author='Chris Staite',
     author_email='chris@yourdreamnet.co.uk',
     url='https://github.com/chrisstaite/lameenc',
-    license='LGPLv3',
+    license='LGPL-3.0-or-later',
     ext_modules=[lameenc],
     classifiers=[
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Programming Language :: Python :: 3 :: Only',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'

@@ -17,7 +17,7 @@ make
 make install
 cd ..
 for PYBIN in /opt/python/*/bin; do
-    if [[ $PYBIN = *"cp27"* ]] || [[ $PYBIN = *"cp36"* ]] || [[ $PYBIN = *"cp37"* ]]; then
+    if [[ $PYBIN = *"p27"* ]] || [[ $PYBIN = *"p36"* ]] || [[ $PYBIN = *"p37"* ]] || [[ $PYBIN = *"p38"* ]] || [[ $PYBIN = *"p39"* ]]; then
         continue
     fi
     "${PYBIN}/python" -m build -w -o build -C="--build-option=--libdir=build/lib" -C="--build-option=--incdir=build/include/lame"
