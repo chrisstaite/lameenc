@@ -38,23 +38,32 @@ typedef struct {
 static PyObject* Encoder_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     EncoderObject* self = (EncoderObject*) type->tp_alloc(type, 0);
-    if (self != NULL)
+    if (self == NULL)
     {
-        Py_BEGIN_ALLOW_THREADS
-        self->lame = lame_init();
-        if (self->lame == NULL)
-        {
-            Py_CLEAR(self);
-        }
-        lame_set_num_channels(self->lame, 2);
-        lame_set_in_samplerate(self->lame, 44100);
-        lame_set_brate(self->lame, 128);
-        lame_set_quality(self->lame, 2);
-        // We aren't providing a file interface, so don't output a blank frame
-        lame_set_bWriteVbrTag(self->lame, 0);
-        Py_END_ALLOW_THREADS
-        self->initialised = 0;
+        return NULL;
     }
+
+    Py_BEGIN_ALLOW_THREADS
+    self->lame = lame_init();
+    Py_END_ALLOW_THREADS
+
+    if (self->lame == NULL)
+    {
+        Py_DECREF(self);
+        PyErr_SetString(PyExc_RuntimeError, "Unable to initialize LAME");
+        return NULL;
+    }
+
+    Py_BEGIN_ALLOW_THREADS
+    lame_set_num_channels(self->lame, 2);
+    lame_set_in_samplerate(self->lame, 44100);
+    lame_set_brate(self->lame, 128);
+    lame_set_quality(self->lame, 2);
+    // We aren't providing a file interface, so don't output a blank frame
+    lame_set_bWriteVbrTag(self->lame, 0);
+    Py_END_ALLOW_THREADS
+
+    self->initialised = 0;
     return (PyObject*) self;
 }
 
@@ -280,6 +289,7 @@ static PyObject* encode(EncoderObject* self, PyObject* args)
         if (outputBytes < 0)
         {
             Py_CLEAR(outputArray);
+            PyErr_SetString(PyExc_RuntimeError, "LAME encoding failed");
         }
         else
         {
@@ -332,12 +342,17 @@ static PyObject* flush(EncoderObject* self, PyObject* args)
                 blockSize
             );
             Py_END_ALLOW_THREADS
-            if (bytes > 0)
+            if (bytes >= 0)
             {
                 if (PyByteArray_Resize(outputArray, bytes) == -1)
                 {
                     Py_CLEAR(outputArray);
                 }
+            }
+            else
+            {
+                Py_CLEAR(outputArray);
+                PyErr_SetString(PyExc_RuntimeError, "LAME flush failed");
             }
             self->initialised = 2;            
         }
