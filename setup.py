@@ -1,6 +1,5 @@
 import sys
 import setuptools
-import distutils.core
 import os.path
 
 
@@ -32,7 +31,7 @@ else:
     incdir = incdir[len('--incdir='):]
 
 # Create the extension
-lameenc = distutils.core.Extension(
+lameenc = setuptools.Extension(
     'lameenc',
     include_dirs=[incdir] if incdir else [],
     libraries=['libmp3lame'] if sys.platform == 'win32' else [],
