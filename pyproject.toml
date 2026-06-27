@@ -1,19 +1,20 @@
 [build-system]
-requires = ["setuptools","wheel", "setuptools-scm"]
+requires = ["setuptools>=77.0.0", "wheel", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lameenc"
 description = "LAME encoding bindings"
 readme = "DESCRIPTION.md"
+requires-python = ">=3.10"
 authors = [
   {name = "Chris Staite", email = "chris@yourdreamnet.co.uk"},
 ]
-license = {file = "LICENSE"}
+license = "LGPL-3.0-or-later"
+license-files = ["LICENSE"]
 classifiers = [
     "Topic :: Multimedia :: Sound/Audio :: Conversion",
     "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux"
