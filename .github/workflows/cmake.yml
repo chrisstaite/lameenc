@@ -340,7 +340,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
         arch: ['arm64', 'x86_64']
 
     steps:
@@ -373,7 +373,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
         arch: ['arm64', 'x86_64']
     permissions:
       contents: read
@@ -394,18 +394,21 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
         python-arch: ['x86', 'x64', 'arm64']
         include:
           - arch: '-AWin32'
             python-arch: 'x86'
             runner: windows-2022
+            generator: 'Visual Studio 17 2022'
           - arch: '-Ax64'
             python-arch: 'x64'
             runner: windows-2022
+            generator: 'Visual Studio 17 2022'
           - arch: '-AARM64'
             python-arch: 'arm64'
             runner: windows-11-arm
+            generator: 'Visual Studio 18 2026'
         exclude:
           - python-version: '3.10'
             python-arch: 'arm64'
@@ -426,7 +429,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake "-DPYTHON_VERSIONS=${{ matrix.python-version }}" .. -G "Visual Studio 17 2022" ${{ matrix.arch }}
+          cmake "-DPYTHON_VERSIONS=${{ matrix.python-version }}" .. -G "${{ matrix.generator }}" ${{ matrix.arch }}
           cmake --build . --config Release
       - name: Archive built wheels
         uses: actions/upload-artifact@v6
@@ -441,7 +444,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
         python-arch: ['x86', 'x64', 'arm64']
         exclude:
           - python-version: '3.10'
