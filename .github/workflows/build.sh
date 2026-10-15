@@ -8,7 +8,7 @@ cd "${0%/*}/../../"
 mkdir build
 cd build
 
-curl -L https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz/download | tar -xzf -
+curl -L https://sourceforge.net/projects/lame/files/lame/4.0/lame-4.0.tar.gz/download | tar -xzf -
 sed -i 's/0-9\*0-9\*/\[0-9]\*\[0-9]\*/g' lame-*/configure
 lame-*/configure "CFLAGS=-fPIC -fno-fast-math" LDFLAGS=-fPIC --prefix=`pwd` --enable-expopt --enable-nasm --disable-frontend \
  --disable-decoder --disable-analyzer-hooks --disable-debug --disable-dependency-tracking
