@@ -19,7 +19,7 @@ if (APPLE)
     set(LAME_FLAGS "${ARCH_FLAGS} -mmacosx-version-min=10.6")
     set(LAME_CONFIGURE "<SOURCE_DIR>/configure" "CFLAGS=${LAME_FLAGS}" "LDFLAGS=${LAME_FLAGS}"
         "--prefix=<BINARY_DIR>" "${HOST}"
-        "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-analyzer-hooks"
+        "--enable-expopt" "--enable-nasm" "--disable-frontend" "--disable-decoder" "--disable-analyzer-hooks"
         "--disable-debug" "--disable-dependency-tracking")
     set(LAME_INSTALL $(MAKE) install)
 elseif (WIN32)
@@ -60,8 +60,8 @@ endif ()
 include(ExternalProject)
 ExternalProject_Add(lame
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/lame"
-    URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz/download
-    URL_HASH SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+    URL https://sourceforge.net/projects/lame/files/lame/4.0/lame-4.0.tar.gz/download
+    URL_HASH SHA256=3df5124d5ad3a98312ffd7ba6a9b36230e4f8a3e66d3ce0f425e336c32d216eb
     DOWNLOAD_NO_PROGRESS 1
     PATCH_COMMAND "${CMAKE_COMMAND}" 
         -D "SOURCE_DIR=<SOURCE_DIR>"
